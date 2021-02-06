@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { error } from 'protractor';
 import { Observable } from 'rxjs';
 import { AccountService } from '../_service/account.service';
 
@@ -11,7 +14,7 @@ import { AccountService } from '../_service/account.service';
 export class NavbarComponent implements OnInit {
   model: any = {};
   
-  constructor(public acc_svc: AccountService) { }
+  constructor(public acc_svc: AccountService, private rtr: Router, private tsr: ToastrService) { }
 
   ngOnInit(): void {
   }
@@ -19,8 +22,8 @@ export class NavbarComponent implements OnInit {
   login() {
     console.log(this.model);
     this.acc_svc.login(this.model).subscribe(
-         Response => {console.log(Response);},
-         error => {console.log(error);}
+         Response => {this.rtr.navigateByUrl('/members');},
+         err => {this.tsr.error(err.error);}
       )
   }
 
@@ -28,5 +31,6 @@ export class NavbarComponent implements OnInit {
     this.acc_svc.logout();
     this.model.username = "";
     this.model.password = "";
+    this.rtr.navigateByUrl('/');
   }
 }
