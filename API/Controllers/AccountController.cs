@@ -23,6 +23,10 @@ namespace API.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto RegDto)
         {
+            if (RegDto is null)
+            {
+                throw new System.ArgumentNullException(nameof(RegDto));
+            }
 
             if (await UserExists(RegDto.Username)) return BadRequest("User is taken.");
 
